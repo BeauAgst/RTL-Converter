@@ -12,7 +12,7 @@ class rtl_convertCommand(sublime_plugin.TextCommand):
 			index = item[0]
 			line = item[1]
 			coord = self.view.text_point(index - 1, 0)
-			line_to_replace = self.view.line(coord)
+			line_to_replace = view.line(coord)
 			view.replace(edit, line_to_replace, line)
 
 class line_split:
@@ -55,14 +55,13 @@ class line_split:
 			if '.direction-mixin' in line:
 				continue
 
+			if '//rtl-ignore' in line:
+				continue
+
 			if 'content:' in line:
 				continue
 
 			if line.strip().startswith('@'):
-				continue
-
-			if '!default;' in line:
-				rtl_dictionary[index] = remove_default(line)
 				continue
 
 			for property_name in properties:
@@ -147,16 +146,6 @@ def amend_string(line):
 	new_line = tabs + '.direction-mixin(' + css_property + '; ' + css_value + ');'
 	# print(new_line)
 	return new_line
-
-
-# If line contains '!default', remove it 
-# and continue as normal. This way we can
-# pick and choose what lines are converted
-def remove_default(line):
-	line = line.replace('!default', '')
-	line = line.split(';')[0].rstrip() + ';'
-	return line
-
 
 # float: left;
 # float: right;
