@@ -55,7 +55,14 @@ class line_split:
 			if '.direction-mixin' in line:
 				continue
 
+			if 'content:' in line:
+				continue
+
 			if line.strip().startswith('@'):
+				continue
+
+			if '!default;' in line:
+				rtl_dictionary[index] = remove_default(line)
 				continue
 
 			for property_name in properties:
@@ -141,8 +148,16 @@ def amend_string(line):
 	# print(new_line)
 	return new_line
 
-# TEST VALUES
-#############
+
+# If line contains '!default', remove it 
+# and continue as normal. This way we can
+# pick and choose what lines are converted
+def remove_default(line):
+	line = line.replace('!default', '')
+	line = line.split(';')[0].rstrip() + ';'
+	return line
+
+
 # float: left;
 # float: right;
 # float: none;
@@ -162,6 +177,7 @@ def amend_string(line):
 # margin-right: 20px;
 # margin: 0 10px 20px 5px;
 # padding-top: 20px;
+# left: 50% !default;
 # padding-left: 20px;
 # padding-right: 20px;
 # padding: 0 10px 20px 5px;
