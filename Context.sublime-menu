@@ -1,0 +1,6 @@
+[
+	{
+		"caption" : "Make RTL-ready",
+		"command" : "rtl_convert"
+	}
+]
